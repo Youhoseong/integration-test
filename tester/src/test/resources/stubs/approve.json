@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/approve"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"message\": \"Hello, World!\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
