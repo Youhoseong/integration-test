@@ -1,32 +1,24 @@
+
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.cloud.contract.wiremock.WireMockSpring
 import org.springframework.web.reactive.function.client.WebClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@StubLoadConfig
 class PaymentGatewayMock : DescribeSpec() {
     private lateinit var wireMock: WireMockServer
     private lateinit var webClient: WebClient
 
     init {
         beforeSpec {
-            wireMock = WireMockServer(WireMockSpring.options().dynamicPort())
-            wireMock.start()
+            wireMock = WireMockServer(WireMockConfiguration.options().port(8080))
                 .also {
-                    wireMock.stubFor(get(urlPathEqualTo("/api/v1/approve"))
-                        .willReturn(aResponse()
-                            .withStatus(200)
-                            .withHeader("Content-Type", "application/json")
-                            .withBody("{\"message\": \"Hello, World!\"}")));
+                    it.start()
                 }
             webClient = WebClient.builder()
-                .baseUrl("http://localhost:${wireMock.port()}")
+                .baseUrl(wireMock.baseUrl())
                 .build()
         }
 
