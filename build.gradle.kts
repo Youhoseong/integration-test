@@ -26,6 +26,7 @@ subprojects {
     apply(plugin = "kotlin-spring")
     apply(plugin = "kotlin-kapt")
     apply(plugin = "kotlin-noarg")
+    apply(plugin = "kotlin-jpa")
     apply(plugin = "kotlin-allopen")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
