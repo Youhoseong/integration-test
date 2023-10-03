@@ -1,5 +1,4 @@
-import com.example.payweb.PaymentFeeCalculator
-import com.example.payweb.PaymentSheet
+import com.example.payweb.service.PaymentFeeCalculator
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -14,7 +13,7 @@ class PaymentFeeCalculatorTest : StringSpec() {
             actual.shouldBe(0)
         }
 
-        "10,000원 이하의 걀제는 수수료 10% 부과" {
+        "10,000원 이하의 결제는 수수료 10% 부과" {
             val amount = 1000L
             val sut = PaymentFeeCalculator()
 

@@ -48,8 +48,11 @@ subprojects {
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter")
-        implementation("org.springframework.boot:spring-boot-starter-webflux")
-        implementation("org.springframework.data:spring-data-jpa:3.1.2")
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework.boot:spring-boot-starter-webflux") {
+            exclude(group = "org.springframework.boot", module = "spring-boot-starter-reactor-netty")
+        }
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.2")
 
         // test
         testImplementation("org.springframework.boot:spring-boot-starter-test")

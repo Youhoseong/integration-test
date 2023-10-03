@@ -1,4 +1,4 @@
-package com.example.payweb
+package com.example.payweb.service
 
 class PaymentFeeCalculator {
     fun calculate(amount: Long): Long {

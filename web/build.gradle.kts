@@ -3,6 +3,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-contract-wiremock:4.0.0")
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-contract-stub-runner
     implementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:4.0.3")
+    implementation("com.h2database:h2")
     implementation("org.springframework.data:spring-data-jpa:3.1.2")
     testImplementation("io.kotest:kotest-assertions-core-jvm:5.5.5")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.5.5")

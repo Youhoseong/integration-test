@@ -1,3 +1,4 @@
+package com.example.payweb
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
