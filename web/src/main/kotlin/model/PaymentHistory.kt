@@ -24,4 +24,12 @@ class PaymentHistory(
         EXPIRED,
         UNKNOWN,
     }
+
+    companion object {
+        fun initialize(): PaymentHistory {
+            return PaymentHistory(
+                status = PaymentStatus.PENDING
+            )
+        }
+    }
 }

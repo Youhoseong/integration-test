@@ -29,3 +29,9 @@ spring:
   sql:
     init:
       mode: embedded
+
+
+logging:
+  level:
+    org.hibernate: debug
+    org.springframework.transaction: debug
