@@ -27,6 +27,11 @@ class SampleTestWithTransactional(
     override fun extensions(): List<Extension> = listOf(SpringExtension)
 
     init {
+        beforeTest {
+            // do nothing
+            // teardown is automated by @Transactional Rollback
+        }
+
         describe("SampleTestWithTransactional") {
             it("SampleTestWithTransactional") {
                 println("SampleTestWithTransactional")
