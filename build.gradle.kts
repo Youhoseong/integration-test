@@ -49,6 +49,9 @@ subprojects {
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.springframework.boot:spring-boot-starter-webflux")
+        implementation("org.springframework.data:spring-data-jpa:3.1.2")
+
+        // test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("io.projectreactor:reactor-test")
         testImplementation("io.kotest:kotest-assertions-core-jvm:5.5.5")
