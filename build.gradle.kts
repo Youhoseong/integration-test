@@ -8,6 +8,7 @@ plugins {
     kotlin("kapt") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
     kotlin("plugin.noarg") version "1.8.21"
+    kotlin("plugin.jpa") version "1.8.21"
 }
 
 allprojects {
