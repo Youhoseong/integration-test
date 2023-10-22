@@ -1,4 +1,4 @@
-package model
+package com.example.domain.sendmoney
 
 enum class SendMoneyStatus {
     PENDING,

@@ -1,4 +1,4 @@
-package com.example.payweb
+package com.example.payweb.config
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.web.reactive.function.client.WebClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class PaymentGatewayMock : DescribeSpec() {
+class BankingApiMock : DescribeSpec() {
     private lateinit var wireMock: WireMockServer
     private lateinit var webClient: WebClient
 

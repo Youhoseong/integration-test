@@ -1,11 +1,12 @@
 package com.example.payweb
 
-import com.example.payweb.model.SendMoneyHistory
-import com.example.payweb.repository.SendMoneyHistoryRepository
+import com.example.domain.sendmoney.SendMoneyHistory
+import com.example.payweb.config.EmbeddedMockServer
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import jpa.SendMoneyHistoryJpaRepository
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional
 )
 class SampleTestWithTransactional(
     private val mockMvc: MockMvc,
-    private val sut: SendMoneyHistoryRepository,
+    private val sut: SendMoneyHistoryJpaRepository,
 ) : DescribeSpec() {
     // Spring extension that allows you to test code that uses the Spring framework for dependency injection.
     // https://kotest.io/docs/extensions/spring.html

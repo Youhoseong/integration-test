@@ -1,4 +1,5 @@
-rootProject.name = "pay"
-include("http")
+rootProject.name = "integration-test"
+include("usecase")
 include("web")
-include("tester")
+include("adapter")
+include("domain")

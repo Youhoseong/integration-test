@@ -1,11 +1,10 @@
-package com.example.payweb.model
+package com.example.domain.sendmoney
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import model.SendMoneyStatus
 
 @Entity
 class SendMoneyHistory(
