@@ -1,6 +1,6 @@
 package com.example.adapter
 
-import com.example.domain.repository.SendMoneyRepository
+import com.example.domain.sendmoney.SendMoneyRepository
 import com.example.domain.sendmoney.SendMoney
 import com.example.adapter.jpa.SendMoneyHistoryJpaRepository
 import com.example.adapter.jpa.SendMoneyJpaRepository

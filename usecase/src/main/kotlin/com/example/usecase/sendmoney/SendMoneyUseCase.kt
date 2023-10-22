@@ -1,6 +1,6 @@
 package com.example.usecase.sendmoney
 
-import com.example.domain.repository.SendMoneyRepository
+import com.example.domain.sendmoney.SendMoneyRepository
 import com.example.domain.sendmoney.SendMoney
 import com.example.usecase.sendmoney.port.`in`.SendMoneyInPort
 import org.springframework.stereotype.Component

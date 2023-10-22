@@ -30,7 +30,6 @@ spring:
     init:
       mode: embedded
 
-
 logging:
   level:
     org.hibernate: debug

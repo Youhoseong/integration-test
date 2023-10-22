@@ -1,4 +1,4 @@
-package com.example.payweb.controller
+package com.example.web.controller
 
 import com.example.domain.sendmoney.SendMoney
 import com.example.usecase.sendmoney.port.`in`.SendMoneyInPort

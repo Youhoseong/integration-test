@@ -1,4 +1,4 @@
-package com.example.payweb.config
+package com.example.web.config
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier

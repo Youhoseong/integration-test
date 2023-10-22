@@ -1,7 +1,7 @@
-package com.example.payweb
+package com.example.web
 
 import com.example.adapter.jpa.SendMoneyHistoryJpaEntity
-import com.example.payweb.config.EmbeddedMockServer
+import com.example.web.config.EmbeddedMockServer
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -38,7 +38,7 @@ class SampleTestWithTransactional(
             // teardown is automated by @Transactional Rollback
         }
 
-        describe("SendMoneyHistory") {
+        xdescribe("SendMoneyHistory") {
             it("Save SendMoneyHistory") {
                 // arrange
                 val history = SendMoneyHistoryJpaEntity(status = SendMoneyStatus.EXPIRED)

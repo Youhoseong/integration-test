@@ -1,4 +1,4 @@
-package com.example.domain.repository
+package com.example.domain.sendmoney
 
 import com.example.domain.sendmoney.SendMoney
 
