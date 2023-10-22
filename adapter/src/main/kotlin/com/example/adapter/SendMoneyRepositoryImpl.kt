@@ -6,6 +6,7 @@ import com.example.adapter.jpa.SendMoneyHistoryJpaRepository
 import com.example.adapter.jpa.SendMoneyJpaRepository
 import com.example.adapter.mapper.SendMoneyMapper
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class SendMoneyRepositoryImpl(
@@ -13,10 +14,17 @@ internal class SendMoneyRepositoryImpl(
     private val sendMoneyJpaRepository: SendMoneyJpaRepository,
     private val sendMoneyHistoryJpaRepository: SendMoneyHistoryJpaRepository,
 ) : SendMoneyRepository {
+    @Transactional
     override fun save(sendMoney: SendMoney): SendMoney {
         val (sendMoneyEntity, sendMoneyHistoryEntity) = sendMoneyMapper.toEntity(sendMoney)
         val savedEntity = sendMoneyJpaRepository.save(sendMoneyEntity)
         val savedHistoryEntity = sendMoneyHistoryJpaRepository.save(sendMoneyHistoryEntity)
         return sendMoneyMapper.toDomain(savedEntity, listOf(savedHistoryEntity))
+    }
+
+    override fun findById(id: Long): SendMoney? {
+        return sendMoneyJpaRepository.findById(id)
+            .orElse(null)
+            ?.let { sendMoneyMapper.toDomain(it) }
     }
 }

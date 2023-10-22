@@ -50,7 +50,7 @@ subprojects {
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter")
-
+        implementation("com.google.code.gson:gson:2.8.9")
         implementation(kotlin("reflect"))
 
         // test

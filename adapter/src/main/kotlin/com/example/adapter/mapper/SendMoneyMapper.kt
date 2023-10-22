@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 internal class SendMoneyMapper {
     fun toDomain(entity: SendMoneyJpaEntity, history: List<SendMoneyHistoryJpaEntity> = emptyList()): SendMoney {
         return SendMoney(
+            id = entity.id,
             status = entity.status,
             fromUserId = entity.fromUserId,
             toUserId = entity.toUserId,

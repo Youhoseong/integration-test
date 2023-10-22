@@ -6,9 +6,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@SpringBootTest(
-    classes = [EmbeddedMockServer::class],
-)
+@SpringBootTest
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class IntegrationTestConfig
