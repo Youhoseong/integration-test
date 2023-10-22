@@ -1,11 +1,11 @@
-package com.example.usecase
+package com.example.worker
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class UsecaseApplication
+class WorkerApplication
 
 fun main(args: Array<String>) {
-    runApplication<UsecaseApplication>(*args)
+    runApplication<WorkerApplication>(*args)
 }

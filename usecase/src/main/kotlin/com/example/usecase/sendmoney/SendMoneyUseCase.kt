@@ -1,4 +1,4 @@
-package com.example.payweb.service
+package com.example.usecase.sendmoney
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
