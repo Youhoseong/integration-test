@@ -25,6 +25,7 @@ internal class SendMoneyMapper {
 
     fun toEntity(domain: SendMoney): Pair<SendMoneyJpaEntity, SendMoneyHistoryJpaEntity> {
         val sendMoney = SendMoneyJpaEntity(
+            id = domain.id,
             status = domain.status,
             fromUserId = domain.fromUserId,
             toUserId = domain.toUserId,

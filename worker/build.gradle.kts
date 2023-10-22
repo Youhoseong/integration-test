@@ -2,15 +2,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":usecase"))
     implementation(project(":adapter"))
+    implementation("org.springframework.boot:spring-boot-starter-web")
 }
 
 sourceSets {
-    main {
-        kotlin.srcDirs("src/main/kotlin")
-    }
-    test {
-        kotlin.srcDirs("src/test/kotlin")
-    }
     create("integrationTest") {
         kotlin.srcDirs("src/integration-test/kotlin")
         resources.srcDirs("src/integration-test/resources")

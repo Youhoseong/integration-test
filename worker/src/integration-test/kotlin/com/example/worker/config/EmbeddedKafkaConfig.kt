@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Profile
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 
 @TestConfiguration
@@ -14,14 +15,12 @@ internal class EmbeddedKafkaConfig(private val kafkaProperties: KafkaProperties)
     private val logger = LoggerFactory.getLogger(EmbeddedKafkaConfig::class.java)
 
     @Bean
+    @Profile(value = ["test"])
     fun embeddedKafkaBroker(): EmbeddedKafkaBroker {
         val brokerAddress = kafkaProperties.bootstrapServers.first()
         val brokerPort = brokerAddress.split(":").last().toInt()
         return EmbeddedKafkaBroker(1)
             .kafkaPorts(brokerPort)
             .brokerListProperty(brokerAddress)
-            .also {
-                logger.info("[EmbeddedKafkaConfig] EmbeddedKafka running..")
-            }
     }
 }
