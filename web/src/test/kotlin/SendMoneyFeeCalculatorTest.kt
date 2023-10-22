@@ -1,12 +1,12 @@
-import com.example.payweb.service.PaymentFeeCalculator
+import com.example.payweb.service.SendMoneyFeeCalculator
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class PaymentFeeCalculatorTest : StringSpec() {
+class SendMoneyFeeCalculatorTest : StringSpec() {
     init {
         "10,000원이 초과하는 결제는 수수료 0원" {
             val amount = 10001L
-            val sut = PaymentFeeCalculator()
+            val sut = SendMoneyFeeCalculator()
 
             val actual = sut.calculate(amount = amount)
 
@@ -15,7 +15,7 @@ class PaymentFeeCalculatorTest : StringSpec() {
 
         "10,000원 이하의 결제는 수수료 10% 부과" {
             val amount = 1000L
-            val sut = PaymentFeeCalculator()
+            val sut = SendMoneyFeeCalculator()
 
             val actual = sut.calculate(amount = amount)
 

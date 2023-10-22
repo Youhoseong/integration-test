@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class PaymentUseCase(
+class SendMoneyUseCase(
 ) {
     @Transactional
     fun invoke() {

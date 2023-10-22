@@ -55,6 +55,7 @@ subprojects {
             exclude(group = "org.springframework.boot", module = "spring-boot-starter-reactor-netty")
         }
         implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.2")
+        implementation(kotlin("reflect"))
 
         // test
         testImplementation("org.springframework.boot:spring-boot-starter-test")

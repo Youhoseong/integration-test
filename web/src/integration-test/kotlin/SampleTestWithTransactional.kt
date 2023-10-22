@@ -1,7 +1,7 @@
 package com.example.payweb
 
-import com.example.payweb.model.PaymentHistory
-import com.example.payweb.repository.PaymentHistoryRepository
+import com.example.payweb.model.SendMoneyHistory
+import com.example.payweb.repository.SendMoneyHistoryRepository
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 )
 class SampleTestWithTransactional(
     private val mockMvc: MockMvc,
-    private val sut: PaymentHistoryRepository,
+    private val sut: SendMoneyHistoryRepository,
 ) : DescribeSpec() {
     // Spring extension that allows you to test code that uses the Spring framework for dependency injection.
     // https://kotest.io/docs/extensions/spring.html
@@ -36,10 +36,10 @@ class SampleTestWithTransactional(
             // teardown is automated by @Transactional Rollback
         }
 
-        describe("PaymentHistory") {
-            it("Save PaymentHistory") {
+        describe("SendMoneyHistory") {
+            it("Save SendMoneyHistory") {
                 // arrange
-                val history = PaymentHistory.initialize()
+                val history = SendMoneyHistory.initialize()
 
                 // act
                 val actual = sut.save(history)

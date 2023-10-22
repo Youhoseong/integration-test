@@ -1,6 +1,6 @@
 package com.example.payweb.service
 
-class PaymentFeeCalculator {
+class SendMoneyFeeCalculator {
     fun calculate(amount: Long): Long {
         // note. 10,000원 초과 시 수수료 0원
         return if (amount > 10000) {
