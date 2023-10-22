@@ -1,4 +1,4 @@
-import com.example.payweb.service.SendMoneyFeeCalculator
+import com.example.usecase.sendmoney.service.SendMoneyFeeCalculator
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

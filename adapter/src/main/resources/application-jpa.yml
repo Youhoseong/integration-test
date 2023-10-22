@@ -1,0 +1,31 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        generate_statistics: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings.trace: false
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem://localhost/~/sample;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;DATABASE_TO_LOWER=true;DATABASE_TO_UPPER=false;IGNORECASE=TRUE
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
+      connection-timeout: 5000
+      validation-timeout: 3000
+      initialization-fail-timeout: 3000
+      maximum-pool-size: 30
+  sql:
+    init:
+      mode: embedded

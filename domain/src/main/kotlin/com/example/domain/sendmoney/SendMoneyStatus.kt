@@ -1,7 +1,7 @@
 package com.example.domain.sendmoney
 
 enum class SendMoneyStatus {
-    PENDING,
+    INITIALIZED,
     SUCCESS,
     FAILED,
     CANCELLED,

@@ -1,12 +1,13 @@
 package com.example.payweb
 
-import com.example.domain.sendmoney.SendMoneyHistory
+import com.example.adapter.jpa.SendMoneyHistoryJpaEntity
 import com.example.payweb.config.EmbeddedMockServer
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
-import jpa.SendMoneyHistoryJpaRepository
+import com.example.adapter.jpa.SendMoneyHistoryJpaRepository
+import com.example.domain.sendmoney.SendMoneyStatus
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Rollback
@@ -40,7 +41,7 @@ class SampleTestWithTransactional(
         describe("SendMoneyHistory") {
             it("Save SendMoneyHistory") {
                 // arrange
-                val history = SendMoneyHistory.initialize()
+                val history = SendMoneyHistoryJpaEntity(status = SendMoneyStatus.EXPIRED)
 
                 // act
                 val actual = sut.save(history)

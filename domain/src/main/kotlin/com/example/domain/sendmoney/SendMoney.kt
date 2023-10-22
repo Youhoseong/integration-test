@@ -1,26 +1,27 @@
 package com.example.domain.sendmoney
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-
-@Entity
-class SendMoney(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+data class SendMoney(
     val id: Long = 0L,
-
-    @Column(name = "status")
     val status: SendMoneyStatus,
-
-    @Column(name = "fromUserId")
     val fromUserId: Long,
-
-    @Column(name = "toUserId")
     val toUserId: Long,
-
-    @Column(name = "amount")
     val amount: Long,
-)
+    val history: List<History>,
+) {
+    data class History (
+        val id: Long = 0L, // note. history id
+        val status: SendMoneyStatus,
+    )
+
+    companion object {
+        fun initialize(fromUserId: Long, toUserId: Long, amount: Long): SendMoney {
+            return SendMoney(
+                status = SendMoneyStatus.INITIALIZED,
+                fromUserId = fromUserId,
+                toUserId = toUserId,
+                amount = amount,
+                history = emptyList(),
+            )
+        }
+    }
+}
