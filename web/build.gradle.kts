@@ -33,7 +33,6 @@ tasks.register<Test>("integrationTest") {
     group = "verification"
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
     classpath = sourceSets["integrationTest"].runtimeClasspath
-    mustRunAfter(tasks["test"])
     useJUnitPlatform()
     testLogging {
         events("passed")
