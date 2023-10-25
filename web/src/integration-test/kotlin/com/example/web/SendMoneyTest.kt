@@ -37,12 +37,18 @@ class SendMoneyTest(
                 // arrange
                 val fromUserId = 1L
                 val toUserId = 2L
+                val amount = 1000L
                 initializeWallet(fromUserId, amount = 1000)
                 initializeWallet(toUserId, amount = 0)
-                val request = SendMoneyRequestFixture.of(fromUserId, toUserId, amount = 1000)
 
                 // act
-                val response = sendMoney(request)
+                val response = sendMoney(
+                    request = SendMoneyRequestFixture.of(
+                        fromUserId = fromUserId,
+                        toUserId = toUserId,
+                        amount = amount,
+                    )
+                )
 
                 // assert
                 withClue("SendMoney(송금) 데이터 검증") {
@@ -50,7 +56,7 @@ class SendMoneyTest(
                     checkNotNull(sendMoney)
                     sendMoney.fromUserId shouldBe fromUserId
                     sendMoney.toUserId shouldBe toUserId
-                    sendMoney.amount shouldBe request.amount
+                    sendMoney.amount shouldBe amount
                     sendMoney.status shouldBe SendMoneyStatus.SUCCESS
                 }
                 withClue("Wallet(지갑) 데이터 검증") {

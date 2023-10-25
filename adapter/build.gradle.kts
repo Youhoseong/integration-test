@@ -1,3 +1,5 @@
+extra["springCloudVersion"] = "2022.0.4"
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":usecase"))
@@ -5,6 +7,13 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-data-jpa:3.1.0")
     api("org.springframework.kafka:spring-kafka")
     api("org.springframework.kafka:spring-kafka-test")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 tasks.bootJar { enabled = false }
