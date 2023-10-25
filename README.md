@@ -1,12 +1,16 @@
-# Integration-Test
+# Daangn Server MeetUp 준비 자료
 
-## How to teardown?
 
-### @Transactional
-- Strong in parallel testing.
-- BUT Interrupt transaction boundary of real application logic.
-```shell
-2023-10-03T21:36:06.502+09:00 DEBUG 27607 --- [-1 @coroutine#3] o.h.e.t.internal.TransactionImpl         : rolling back
-```
+## 통합 테스트 샘플 구축
 
-### Delete data manually
+- 당근페이 winter.you
+- https://festa.io/events/4140
+
+
+
+## API 호출로 시작하는 통합테스트
+
+
+## 이벤트를 받아서 시작하는 통합테스트
+
+
