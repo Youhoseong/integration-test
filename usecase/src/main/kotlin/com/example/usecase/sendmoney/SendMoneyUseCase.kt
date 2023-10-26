@@ -2,6 +2,7 @@ package com.example.usecase.sendmoney
 
 import com.example.domain.sendmoney.SendMoneyRepository
 import com.example.domain.sendmoney.SendMoney
+import com.example.domain.user.UserRepository
 import com.example.usecase.sendmoney.port.`in`.SendMoneyInPort
 import com.example.usecase.support.port.out.ManageTransactionOutPort
 import com.example.usecase.wallet.WalletRepository
@@ -12,6 +13,7 @@ import java.lang.RuntimeException
 class SendMoneyUseCase(
     private val sendMoneyRepository: SendMoneyRepository,
     private val walletRepository: WalletRepository,
+    private val userRepository: UserRepository,
     private val manageTransactionPort: ManageTransactionOutPort,
 ) : SendMoneyInPort {
     override fun invoke(
@@ -20,6 +22,7 @@ class SendMoneyUseCase(
         amount: Long,
     ): SendMoney {
         val initialized = SendMoney.initialize(fromUserId, toUserId, amount)
+        this.validateUserStatus(fromUserId, toUserId)
         return manageTransactionPort.withTransaction {
             val savedInitialized = sendMoneyRepository.save(initialized)
             val fromWallet = walletRepository.findByUserId(fromUserId)
@@ -33,5 +36,12 @@ class SendMoneyUseCase(
             val success = savedInitialized.success()
             sendMoneyRepository.save(success)
         }
+    }
+
+    private fun validateUserStatus(fromUserId: Long, toUserId: Long) {
+        userRepository.findById(fromUserId)
+            .also { it.validateBlockStatus() }
+        userRepository.findById(toUserId)
+            .also { it.validateBlockStatus() }
     }
 }

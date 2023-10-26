@@ -1,6 +1,7 @@
 package com.example.web.config
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier
 import com.github.tomakehurst.wiremock.common.SingleRootFileSource
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Bean
 class EmbeddedMockServer : SmartLifecycle {
     private val logger = LoggerFactory.getLogger(EmbeddedMockServer::class.java)
 
-    private val configuration = WireMockConfiguration().port(5050)
+    private val configuration = WireMockConfiguration().port(5100)
         .fileSource(SingleRootFileSource("src/main/resources"))
         .notifier(ConsoleNotifier(true))
 
@@ -36,5 +37,23 @@ class EmbeddedMockServer : SmartLifecycle {
 
     override fun isRunning(): Boolean {
         return wireMockServer().isRunning
+    }
+
+    fun stubForGet(
+        requestUrl: String,
+        contentType: String,
+        jsonBody: String,
+        delayTime: Int = 0,
+    ) {
+        wireMockServer().stubFor(
+            WireMock.get(WireMock.urlMatching(requestUrl))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withStatus(200)
+                        .withFixedDelay(delayTime)
+                        .withHeader("Content-Type", contentType)
+                        .withBody(jsonBody),
+                ),
+        )
     }
 }

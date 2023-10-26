@@ -6,6 +6,8 @@ import com.example.adapter.jpa.WalletJpaRepository
 import com.example.domain.sendmoney.SendMoney
 import com.example.domain.sendmoney.SendMoneyRepository
 import com.example.domain.sendmoney.SendMoneyStatus
+import com.example.domain.user.User
+import com.example.web.config.EmbeddedMockServer
 import com.example.web.config.IntegrationTestConfig
 import com.example.web.controller.SendMoneyController
 import com.example.web.fixture.SendMoneyRequestFixture
@@ -27,6 +29,7 @@ class SendMoneyTest(
     private val sendMoneyJpaRepository: SendMoneyRepository,
     private val sendMoneyHistoryJpaRepository: SendMoneyHistoryJpaRepository,
     private val objectMapper: ObjectMapper,
+    private val embeddedMockServer: EmbeddedMockServer,
 ) : FunSpec() {
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     private val gson = Gson()
@@ -40,6 +43,8 @@ class SendMoneyTest(
                 val amount = 1000L
                 initializeWallet(fromUserId, amount = 1000)
                 initializeWallet(toUserId, amount = 0)
+                mockUser(fromUserId, User.UserStatus.BLOCKED)
+                mockUser(toUserId, User.UserStatus.NORMAL)
 
                 // act
                 val response = sendMoney(
@@ -84,6 +89,19 @@ class SendMoneyTest(
             }
         }
         walletJpaRepository.save(updatedWallet)
+    }
+
+    private fun mockUser(userId: Long, status: User.UserStatus) {
+        this.embeddedMockServer.stubForGet(
+            requestUrl = "/api/v1/users/$userId",
+            contentType = "application/json",
+            jsonBody = """
+                {
+                    "user_id": $userId,
+                    "status": "${status.name}"
+                }
+            """.trimIndent(),
+        )
     }
 
     private fun sendMoney(request: SendMoneyController.SendMoneyRequest): SendMoney {
