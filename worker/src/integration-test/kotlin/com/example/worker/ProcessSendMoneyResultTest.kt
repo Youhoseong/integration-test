@@ -32,15 +32,18 @@ class ProcessSendMoneyResultTest(
         context("다른 시스템으로 부터 이벤트 수신 처리") {
             test("송금 결과 이벤트를 수신하고, 관련 데이터를 변경/저장함") {
                 // arrange
-                val notCompleted = saveNotCompletedSendMoney(1L, 2L, amount = 1000)
+                val fromUserId = 1L
+                val toUserId = 2L
+                val notCompletedSendMoney = saveNotCompletedSendMoney(fromUserId, toUserId, amount = 1000)
                 val topic = "sample.send-money.result.v1"
-                val success = SendMoneyResult(
-                    sendMoneyId = notCompleted.id,
-                    status = SendMoneyStatus.SUCCESS,
-                )
 
                 // act
-                val payload = objectMapper.writeValueAsString(success)
+                val payload = objectMapper.writeValueAsString(
+                    SendMoneyResult(
+                        sendMoneyId = notCompletedSendMoney.id,
+                        status = SendMoneyStatus.SUCCESS,
+                    )
+                )
                 kafkaTemplate.send(topic, payload)
 
                 // assert
@@ -49,7 +52,7 @@ class ProcessSendMoneyResultTest(
                     retries = 5,
                 )
                 eventually(config) {
-                    val sendMoney = sendMoneyJpaRepository.findById(notCompleted.id).getOrNull()
+                    val sendMoney = sendMoneyJpaRepository.findById(notCompletedSendMoney.id).getOrNull()
                     checkNotNull(sendMoney)
                     sendMoney.status shouldBe SendMoneyStatus.SUCCESS
                 }

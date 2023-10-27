@@ -1,6 +1,5 @@
 package com.example.web
 
-import com.example.adapter.jpa.SendMoneyHistoryJpaRepository
 import com.example.adapter.jpa.WalletJpaEntity
 import com.example.adapter.jpa.WalletJpaRepository
 import com.example.domain.sendmoney.SendMoney
@@ -8,7 +7,6 @@ import com.example.domain.sendmoney.SendMoneyRepository
 import com.example.domain.sendmoney.SendMoneyStatus
 import com.example.domain.user.User
 import com.example.web.config.EmbeddedMockServer
-import com.example.web.config.IntegrationTestConfig
 import com.example.web.controller.SendMoneyController
 import com.example.web.fixture.SendMoneyRequestFixture
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -18,16 +16,20 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 
-@IntegrationTestConfig
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@SpringBootTest
 class SendMoneyTest(
     private val mockMvc: MockMvc,
     private val walletJpaRepository: WalletJpaRepository,
     private val sendMoneyJpaRepository: SendMoneyRepository,
-    private val sendMoneyHistoryJpaRepository: SendMoneyHistoryJpaRepository,
     private val objectMapper: ObjectMapper,
     private val embeddedMockServer: EmbeddedMockServer,
 ) : FunSpec() {
@@ -43,7 +45,7 @@ class SendMoneyTest(
                 val amount = 1000L
                 initializeWallet(fromUserId, amount = 1000)
                 initializeWallet(toUserId, amount = 0)
-                mockUser(fromUserId, User.UserStatus.BLOCKED)
+                mockUser(fromUserId, User.UserStatus.NORMAL)
                 mockUser(toUserId, User.UserStatus.NORMAL)
 
                 // act
@@ -93,7 +95,7 @@ class SendMoneyTest(
 
     private fun mockUser(userId: Long, status: User.UserStatus) {
         this.embeddedMockServer.stubForGet(
-            requestUrl = "/api/v1/users/$userId",
+            requestUrl = "/users/$userId",
             contentType = "application/json",
             jsonBody = """
                 {
@@ -106,7 +108,7 @@ class SendMoneyTest(
 
     private fun sendMoney(request: SendMoneyController.SendMoneyRequest): SendMoney {
         val requestJson = gson.toJson(request)
-        val result = mockMvc.post("/api/v1/send-money") {
+        val result = mockMvc.post("/send-money") {
             contentType = MediaType.APPLICATION_JSON
             content = requestJson.trimIndent()
         }.andDo {

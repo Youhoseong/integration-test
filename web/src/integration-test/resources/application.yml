@@ -1,4 +1,13 @@
 spring:
+  profiles:
+    include:
+      - jpa
+      - redis
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+---
+spring:
   config:
     activate:
       on-profile: test

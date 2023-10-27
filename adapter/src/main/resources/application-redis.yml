@@ -1,0 +1,11 @@
+redis:
+  host: localhost
+  port: 6379
+  database: 0
+  request-queue-size: 300
+  connection-timeout-millis: 1000
+  command-timeout-millis: 1500
+  shutdown-timeout-millis: 3000
+  keep-alive-idle-millis: 180000
+  keep-alive-interval-millis: 30000
+  keep-alive-probe-count: 3
