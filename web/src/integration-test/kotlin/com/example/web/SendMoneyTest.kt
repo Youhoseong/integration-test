@@ -110,8 +110,6 @@ class SendMoneyTest(
         val result = mockMvc.post("/send-money") {
             contentType = MediaType.APPLICATION_JSON
             content = requestJson.trimIndent()
-        }.andDo {
-            print()
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
