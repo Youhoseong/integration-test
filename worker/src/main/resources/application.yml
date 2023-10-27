@@ -3,6 +3,7 @@ spring:
     include:
       - jpa
       - kafka
+      - redis
   jackson:
     property-naming-strategy: SNAKE_CASE
 

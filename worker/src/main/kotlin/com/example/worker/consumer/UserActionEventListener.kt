@@ -2,7 +2,7 @@ package com.example.worker.consumer
 
 import com.example.domain.sendmoney.SendMoneyRepository
 import com.example.domain.sendmoney.SendMoneyStatus
-import com.example.worker.scheme.SendMoneyResult
+import com.example.worker.scheme.UserActionEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -11,28 +11,26 @@ import org.springframework.stereotype.Component
 import java.lang.RuntimeException
 
 @Component
-class SendMoneyResultListener(
+class UserActionEventListener(
     private val sendMoneyRepository: SendMoneyRepository,
 ) {
     private val objectMapper = ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
     @KafkaListener(
-        topics = ["sample.send-money.result.v1"],
+        topics = ["sample.signup"],
         containerFactory = "kafkaListenerContainerFactory",
         groupId = "money-worker",
     )
     fun listen(record: ConsumerRecord<String, String>) {
         println("event - data($record)")
-        val result = objectMapper.readValue(record.value(), SendMoneyResult::class.java)
-        when (result.status) {
-            SendMoneyStatus.SUCCESS -> {
-                val sendMoney = sendMoneyRepository.findById(result.sendMoneyId)
-                    ?: throw RuntimeException("NotFound SendMoney")
-                val success = sendMoneyRepository.save(sendMoney.success())
-                println("success(${success.status})")
-            }
-            else -> {
-
+        val result = objectMapper.readValue(record.value(), UserActionEvent::class.java)
+        when (result.type) {
+            UserActionEvent.UserActionType.SIGNUP -> {
+                val sendMoney = sendMoneyRepository.findAllWaitingByUserId(result.userId)
+                sendMoney.forEach {
+                    val success = sendMoneyRepository.save(it.success())
+                    println("success(${success.status})")
+                }
             }
         }
     }

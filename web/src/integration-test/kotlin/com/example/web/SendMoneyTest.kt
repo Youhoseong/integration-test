@@ -37,48 +37,47 @@ class SendMoneyTest(
     private val gson = Gson()
 
     init {
-        context("유저 간 송금") {
-            test("송금 후, 관련 데이터가 정상적으로 저장됨") {
-                // arrange
-                val fromUserId = 1L
-                val toUserId = 2L
-                val amount = 1000L
-                initializeWallet(fromUserId, amount = 1000)
-                initializeWallet(toUserId, amount = 0)
-                mockUser(fromUserId, User.UserStatus.NORMAL)
-                mockUser(toUserId, User.UserStatus.NORMAL)
+        test("유저 간 송금 후, 송금 데이터와 지갑 데이터가 정상적으로 업데이트 됨") {
+            // arrange
+            val fromUserId = 1L
+            val toUserId = 2L
+            val amount = 1000L
+            arrangeWallet(fromUserId, amount = 1000)
+            arrangeWallet(toUserId, amount = 0)
+            arrangeUser(fromUserId, User.UserStatus.NORMAL)
+            arrangeUser(toUserId, User.UserStatus.NORMAL)
 
-                // act
-                val response = sendMoney(
-                    request = SendMoneyRequestFixture.of(
-                        fromUserId = fromUserId,
-                        toUserId = toUserId,
-                        amount = amount,
-                    )
+            // act
+            val actual = sendMoney(
+                request = SendMoneyRequestFixture.of(
+                    fromUserId = fromUserId,
+                    toUserId = toUserId,
+                    amount = amount,
                 )
+            )
 
-                // assert
-                withClue("SendMoney(송금) 데이터 검증") {
-                    val sendMoney = sendMoneyJpaRepository.findById(response.id)
-                    checkNotNull(sendMoney)
-                    sendMoney.fromUserId shouldBe fromUserId
-                    sendMoney.toUserId shouldBe toUserId
-                    sendMoney.amount shouldBe amount
-                    sendMoney.status shouldBe SendMoneyStatus.SUCCESS
-                }
-                withClue("Wallet(지갑) 데이터 검증") {
-                    val fromUserWallet = walletJpaRepository.findByUserId(fromUserId)
-                    checkNotNull(fromUserWallet)
-                    fromUserWallet.balanceAmount shouldBe 0 // 1,000원(기존) - 1,000원(송금 한 금액) = 0원
-                    val toUserWallet = walletJpaRepository.findByUserId(toUserId)
-                    checkNotNull(toUserWallet)
-                    toUserWallet.balanceAmount shouldBe 1000 // 0원(기존) + 1,000원(송금 받은 금액) = 1,000원
-                }
+            // assert
+            withClue("SendMoney(송금) 데이터 검증") {
+                val sendMoneyId = actual.id
+                val sendMoney = sendMoneyJpaRepository.findById(sendMoneyId)
+                checkNotNull(sendMoney)
+                sendMoney.fromUserId shouldBe fromUserId
+                sendMoney.toUserId shouldBe toUserId
+                sendMoney.amount shouldBe amount
+                sendMoney.status shouldBe SendMoneyStatus.SUCCESS
+            }
+            withClue("Wallet(지갑) 데이터 검증") {
+                val fromUserWallet = walletJpaRepository.findByUserId(fromUserId)
+                checkNotNull(fromUserWallet)
+                fromUserWallet.balanceAmount shouldBe 0 // 1,000원(기존) - 1,000원(송금 한 금액) = 0원
+                val toUserWallet = walletJpaRepository.findByUserId(toUserId)
+                checkNotNull(toUserWallet)
+                toUserWallet.balanceAmount shouldBe 1000 // 0원(기존) + 1,000원(송금 받은 금액) = 1,000원
             }
         }
     }
 
-    private fun initializeWallet(
+    private fun arrangeWallet(
         userId: Long,
         amount: Long,
     ) {
@@ -93,7 +92,7 @@ class SendMoneyTest(
         walletJpaRepository.save(updatedWallet)
     }
 
-    private fun mockUser(userId: Long, status: User.UserStatus) {
+    private fun arrangeUser(userId: Long, status: User.UserStatus) {
         this.embeddedMockServer.stubForGet(
             requestUrl = "/users/$userId",
             contentType = "application/json",

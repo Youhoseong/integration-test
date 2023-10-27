@@ -23,6 +23,7 @@ class SendMoneyUseCase(
     ): SendMoney {
         val initialized = SendMoney.initialize(fromUserId, toUserId, amount)
         this.validateUserStatus(fromUserId, toUserId)
+        this.validateDailyTotalSendMoneyAmount(fromUserId, amount)
         return manageTransactionPort.withTransaction {
             val savedInitialized = sendMoneyRepository.save(initialized)
             val fromWallet = walletRepository.findByUserId(fromUserId)
@@ -43,5 +44,14 @@ class SendMoneyUseCase(
             .also { it.validateBlockStatus() }
         userRepository.findById(toUserId)
             .also { it.validateBlockStatus() }
+    }
+
+    private fun validateDailyTotalSendMoneyAmount(userId: Long, amount: Long) {
+        val totalAmount = sendMoneyRepository.getDailyTotalSendMoneyAmount(userId) + amount
+        // 천만원 초과 시
+        if (totalAmount > 10000000L) {
+            throw RuntimeException("Daily Total Send Money Amount Exceeded")
+        }
+        sendMoneyRepository.setDailyTotalSendMoneyAmount(userId, totalAmount)
     }
 }
