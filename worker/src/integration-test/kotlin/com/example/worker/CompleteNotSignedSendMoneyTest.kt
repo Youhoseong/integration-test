@@ -2,6 +2,8 @@ package com.example.worker
 
 import com.example.adapter.jpa.SendMoneyJpaEntity
 import com.example.adapter.jpa.SendMoneyJpaRepository
+import com.example.adapter.jpa.WalletJpaEntity
+import com.example.adapter.jpa.WalletJpaRepository
 import com.example.domain.sendmoney.SendMoneyStatus
 import com.example.worker.scheme.UserActionEvent
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -9,6 +11,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import io.kotest.assertions.timing.EventuallyConfig
 import io.kotest.assertions.timing.eventually
 import io.kotest.assertions.until.fibonacci
+import io.kotest.assertions.withClue
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -22,6 +25,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @SpringBootTest
 @ActiveProfiles("test")
 class CompleteNotSignedSendMoneyTest(
+    private val walletJpaRepository: WalletJpaRepository,
     private val sendMoneyJpaRepository: SendMoneyJpaRepository,
     private val kafkaTemplate: KafkaTemplate<String, String>,
 ) : FunSpec() {
@@ -33,7 +37,12 @@ class CompleteNotSignedSendMoneyTest(
             // arrange
             val fromUserId = 1L
             val toUserId = 2L
-            val waitingSendMoney = arrangeWaitingSendMoney(fromUserId, toUserId, amount = 1000)
+            val waitingSendMoney = arrangeWaitingSendMoney(
+                fromUserId = fromUserId,
+                toUserId = toUserId,
+                amount = 1000,
+            )
+            arrangeWallet(toUserId, amount = 0)
             val topic = "sample.signup"
 
             // act
@@ -51,9 +60,16 @@ class CompleteNotSignedSendMoneyTest(
                 retries = 5,
             )
             eventually(config) {
-                val sendMoney = sendMoneyJpaRepository.findById(waitingSendMoney.id).getOrNull()
-                checkNotNull(sendMoney)
-                sendMoney.status shouldBe SendMoneyStatus.SUCCESS
+                withClue("송금 데이터 검증") {
+                    val sendMoney = sendMoneyJpaRepository.findById(waitingSendMoney.id).getOrNull()
+                    checkNotNull(sendMoney)
+                    sendMoney.status shouldBe SendMoneyStatus.SUCCESS
+                }
+                withClue("수취인 지갑 잔액 검증") {
+                    val wallet = walletJpaRepository.findByUserId(toUserId)
+                    checkNotNull(wallet)
+                    wallet.balanceAmount shouldBe 1000 // 0원(기존) + 1,000원(송금 받은 금액) = 1,000원
+                }
             }
         }
     }
@@ -72,5 +88,20 @@ class CompleteNotSignedSendMoneyTest(
                 amount = amount,
             )
         )
+    }
+
+    private fun arrangeWallet(
+        userId: Long,
+        amount: Long,
+    ) {
+        val wallet = walletJpaRepository.findByUserId(userId)
+        val updatedWallet = when (wallet == null) {
+            true -> WalletJpaEntity(userId = userId, balanceAmount = amount)
+            false -> {
+                wallet.balanceAmount = amount
+                wallet
+            }
+        }
+        walletJpaRepository.save(updatedWallet)
     }
 }
